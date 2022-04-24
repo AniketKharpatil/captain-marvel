@@ -1,0 +1,35 @@
+File-prac5.l
+%{
+int lines=0, special=0, smallcase=0, uppercase=0, characters=0, words=0, spaces=0, numbers=0 ;
+%}
+
+%%
+[a-z] {smallcase++;}
+[A-Z]   {uppercase++; }
+[0-9]+   {numbers++; }
+\n   {lines++;}
+" "   {spaces++;}
+.    {special++;}
+
+%%
+
+int main(){
+yyin= fopen("demo.txt", "r");
+yylex();
+printf("Lines=%d\n", lines);
+printf("special characters=%d\n", special);
+printf("small case=%d\n", smallcase);
+printf("upper case=%d\n", uppercase);
+printf("numbers=%d\n", numbers);
+printf("spaces=%d\n", spaces);
+printf("words=%d\n",spaces+lines);
+printf("characters=%d\n", smallcase+uppercase+numbers+special);
+return 0;
+}
+
+int yywrap()
+{
+return 1;
+}
+
+File-demo.txt-any text
