@@ -82,7 +82,9 @@ for non_terminal in non_terminals:
     
    ##################################################################################
    
-grammar = [['S','ABc'],['A','B'],['B','b']]
+from re import A
+
+grammar = [['S','AaAb'],['S','BbAa'],['A','#'],['B','#']]
 # s=A
 # A=B
 # B=b
@@ -91,10 +93,12 @@ for i in range(len(grammar)):
         print(f'First({grammar[i][0]}) = {grammar[i][1][0]}')
     else:
         val = grammar[i][1][0]
-        while not val.islower():
+        while  not val.islower():
             for j in range(len(grammar)):
                 if grammar[j][0]==val:
                     val = grammar[j][1][0]
                     break
+            if val == '#':
+                break
         print(f'First({grammar[i][0]}) = {val}')
 
