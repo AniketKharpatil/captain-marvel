@@ -1,0 +1,24 @@
+file-Prac1.l:
+%{
+int id=0, un=0;
+%}
+
+%%
+^[a-zA-Z_][a-zA-Z0-9_] {printf("valid");}
+^[^a-zA-Z_] {printf("invalid");}
+. ;
+%%
+  
+int main()
+{
+yylex();
+	return 0;
+}
+
+int yywrap(){
+return 1;
+}
+
+RUNNING: flex prac1.l
+	       Gcc lex.yy.c
+	       A.exe
