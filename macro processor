@@ -1,0 +1,86 @@
+inp=[['MACRO'],
+['&LAB', 'ADDM', '&ARG1', '&ARG2', '&ARG3'], 
+['&LAB', 'A', '1', '&ARG1'],
+['','A', '2', '&ARG2'],
+['','A', '3', '&ARG3'],
+['MEND']]
+
+inp1=[['MACRO'],
+['&LAB', 'ADDM', '&ARG1', '&ARG2', '&ARG3'], 
+['&LAB', 'A', '1', '&ARG1'],
+['','A', '2', '&ARG2'],
+['','A', '3', '&ARG3'],
+['MEND']]
+
+op=['A', 'S']
+mdtc=1
+mntc=1
+mdt=[]
+mnt=[]
+ala=[]
+
+print ("MACRO definition table")
+print('='*50)
+
+def createala(xt):
+    tc = xt
+    tc.pop(1)
+    ala.extend(tc)
+
+for x in inp:
+    if x[0]=='MACRO': 
+        continue
+    elif len(x)>1 and x[1] not in op:
+        print ([mdtc,x])
+        mdtc+=1
+        createala(x)
+    elif len(x)>1 and x[1] in op : 
+        temp = x
+        yt=[]
+        for y in range (len(temp)):
+            if temp[y] in ala :
+                yt.append('#' + str(ala.index(temp[y])))
+            else :
+                yt.append(temp[y])
+        t=[mdtc,yt]
+        mdtc+=1
+        mdt.append(t)
+    elif x[0]=='MEND':
+        t=[mdtc, ['MEND']]
+        mdtc+=1
+        mdt.append(t)
+        
+        
+for d in mdt: 
+    print (d)
+    
+print()
+print ("Arguement List Array")
+print('='*50)
+
+for i in range(len(ala)):
+    print('#'+str(i),ala[i])
+
+mdtc=1
+for x in range(len(inp)):
+    yt=[]
+    lt=inp1[x]
+    if lt[0]=='MACRO':
+        yt.append(mntc)
+        mntc+=1
+        yk=inp1[x+1]
+        print(yk)
+        yt.append(yk[1])
+        yt.append(mdtc)
+        mdtc+=1
+    else:
+        mdtc+=1
+    mnt.append(yt)     
+
+print()
+print ("MACRO name table")
+print('='*50)
+
+for n in mnt:
+    if n:
+        print(n)
