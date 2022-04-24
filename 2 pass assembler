@@ -1,0 +1,72 @@
+ip=[['','START','200',''],
+   ['','MOVR','AREG','DATA'],
+   ['','MOVR','BREG','=4'],
+   ['X','EQU','10',''],
+   ['','LTORG','',''],
+   ['DATA','DC','4',''],
+   ['ST','DS','10',''],
+   ['','MOVR','CREG','=5'],
+   ['','END','','']]
+instruction=['LTORG','MOVR','DC']
+instruction1=['START','EQU','END','DS']
+reg=['AREG','BREG','CREG']
+lc=[]
+lt=0
+
+for z in ip:
+    s=z[1]
+    if s=='START':
+        lt=int(z[2])
+        lc.append(lt)
+    elif s=='DS':
+        lt=lt+int(z[2])
+    elif s in instruction:
+        lt=lt+1
+    elif s=='END':
+        break
+    lc.append(lt)
+
+st={}
+for x in range(len(ip)):
+    tempx=ip[x]
+    for yn in range (len(tempx)):
+        y=tempx[yn]
+        if y not in reg and y not in instruction and y not in instruction1 and y.isalpha():
+            if y in st.keys():
+                st.update({y:lc[x]})
+            elif yn==3:
+                st[y]= '-'
+            elif tempx[1]=='EQU':
+                st[y] = tempx[2]
+            elif yn==0:
+                st[y]=lc[x]
+                
+literal={}
+for x in range(len(ip)):
+    if 'LTORG' in ip[x]:
+        lit=x
+
+for x in range(len(ip)):
+    tempx=ip[x]
+    if tempx[3]:
+        k = tempx[3]
+        if k[0]=='=':
+            if x<lit: 
+                literal[k]=lc[lit]
+            else:
+                literal[k]=lc[-1]
+                lc.append(lc[-1]+1)
+
+print('symbol table')
+index=0
+for n in st:
+    print(index, n, '\t', st[n], '\t', '1')
+    index+=1
+print()
+print('literal table')
+index=0
+for n in literal:
+    print(index, n, '\t', literal[n])
+    index+=1   
+print()
+print(lc)
