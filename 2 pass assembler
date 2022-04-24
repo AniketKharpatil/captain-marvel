@@ -75,33 +75,34 @@ print()
 
 print("intermediate code")
 
-cmd_val = {'START':['AD',1],'MOVER':['IS',4],'DC':['DL',2],'DS':['DL',1],
-        'EQU':['AD',3],'LTORG':['AD',5],'END':['AD',2] 
-}
+Is = ['STOP','ADD','SUB','MUL','MOVER','MOVEM','COMP','BC','DIV','READ','PRINT']
+AD  =['START','END','ORIGN','EQU','LTORG']
+Dl = ['DS','DC']    
 rg_val = {'AREG':1,'BREG':2,'CREG':3}
-st = {'DATA':[0,203],'ST':[1,204]}
+st = {'DATA':[0,203],'X':[1,10],'ST':[2,204]} 
 LT = {'=4':[0,203],'=5':[1,226]}
-
+tmp_lt = []
 for i in range(len(ip)):
-    
     for j in range(len(ip[i])):
-        if ip[i][j] in cmd_val:
-            val = cmd_val[ip[i][j]]
-            print(f'({val[0]},{val[1]})',end='')
-            if ip[i][j] == 'LTORG':
-                print(f'(DL,2)(C,1)',end='')
-                
-        elif ip[i][j] in rg_val:
-            val = rg_val[ip[i][j]]
-            print(f'(RG,{val})',end='')
-            
-        elif ip[i][j] in st:
-            print(f'(S,{st[ip[i][j]][0]})',end='')
-            
-        elif ip[i][j] in LT:
-            print(f'(L,{LT[ip[i][j]][0]})',end='')
-            
+        if ip[i][j] in Is:
+            print(f'(AD,{Is.index(ip[i][j])})',end='')
         elif ip[i][j].isdigit():
-            print(f'(C,{ip[i][j]})',end='')
+            print(f'(C,{int(ip[i][j])})',end='')
+        elif ip[i][j] in AD:
+            print(f'(AD,{AD.index(ip[i][j]) + 1})',end='')
+            if ip[i][j] == 'LTORG':
+                for k in range(len(tmp_lt)):
+                    print(f'(DL,02)(C,{tmp_lt[k][1]})',end='')
+                    tmp_lt.remove(tmp_lt[k])
+        elif ip[i][j] in Dl:
+            print(f'(DL,{Dl.index(ip[i][j]) + 1})',end='')
+        elif ip[i][j] in rg_val:
+            print(f'(RG,{rg_val[ip[i][j]]})',end='')
+        elif ip[i][j] in st:
+            print(f'(ST,{st[ip[i][j]][0]})',end='')
+        elif ip[i][j] in LT:
+            tmp_lt.append(ip[i][j])
+            print(f'(LT,{LT[ip[i][j]][0]})',end='')
+        
     print()
     
